@@ -1,5 +1,256 @@
 ---
 
+---
+
+---
+
+# 이수빈 202130422
+
+## 2023-05-18
+###
+#####
+
+
+* 합성은 여러 개의 컴포넌트를 결합하여 새로운 컴포넌트를 만드는 것입니다. 합성의 사용 기법은 조합 방법에 따라 다양하게 나눌 수 있습니다.
+
+* 담다, 포함하다, 격리하다의 Containment
+특정 컴포넌트가 하위 컴포넌트를 포함하는 방법입니다.
+컴포넌트에 따라 어떤 자식 엘리먼트가 들어올지 미리 예상할 수 없는 경우가 있습니다.
+Sidebar나 Dialog와 같은 컴포넌트는 범용적인 박스 역할을 하며, 자주 사용됩니다.
+이러한 컴포넌트에서는 children prop을 사용하여 자식 엘리먼트를 출력에 그대로 전달하는 것이 좋습니다.
+children prop은 컴포넌트의 props에 기본적으로 들어있는 children 속성을 사용합니다.
+예를 들어, props.children을 사용하면 해당 컴포넌트의 하위 컴포넌트가 모두 children으로 전달됩니다.
+예시:
+```
+function FancyBorder(props) {
+  return (
+    <div className={"FancyBorder FancyBorder-" + props.color}>
+      {props.children}
+    </div>
+  );
+}
+```
+
+* children은 위 코드에서 세 번째로 들어가는 파라미터입니다. 파라미터가 배열로 되어 있는 이유는 여러 개의 하위 컴포넌트를 가질 수 있기 때문입니다. 배열 형태인 children은 여러 개의 하위 컴포넌트를 처리하기 위한 것입니다.
+
+React.createElement(type, [props], [...children])에 관하여,
+jsx를 사용하지 않는 경우의 props 전달 방법은 다음과 같습니다.
+
+예시:
+
+```
+// JSX를 이용한 간단한 방법
+const jsxElemnet = <h1 className="jsx">JSX Element</h1>;
+
+// 리액트 기능을 사용한 방법
+const reactElement = React.createElement(
+  "h1", // 태그
+  { className: "obj" }, // props
+  "OBJ Element" // 자식 엘리먼트
+);
+```
+* 마지막으로, index.js 파일을 변경해야 합니다. 이렇게 수정하면 정상적으로 동작합니다.
+```
+import React from "react";
+import ReactDOM from "react-dom/client";
+import Calculator from "./chapter_12/Calculator";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <Calculator />
+  </React.StrictMode>
+);
+
+reportWebVitals();
+```
+* FancyBorder 컴포넌트를 사용하는 예제입니다.
+
+WelcomDialog 컴포넌트는 FancyBorder 컴포넌트를 사용하며, FancyBorder 컴포넌트는 <h1>과 <p> 두 개의 태그를 children으로 전달받습니다.
+
+예시:
+```
+    function WelcomDialog(props) {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">어서오세요</h1>
+      <p className="Dialog-message">우리 사이트에 방문하신 것을 환영합니다!</p>
+    </FancyBorder>
+  );
+}
+```
+* 리액트에서는 props.children을 사용하여 하위 컴포넌트를 하나로 모아서 제공해줍니다. 만약 여러 개의 children 집합이 필요한 경우에는 별도로 props를 정의하여 각각 원하는 컴포넌트를 넣어줄 수 있습니다.
+
+예를 들어, SplitPane은 화면을 왼쪽과 오른쪽으로 분할해주는 컴포넌트입니다. App에서 SplitPane을 사용하여 left와 right라는 두 개의 props를 정의하고 있습니다. 이렇게 App에서 left와 right를 props로 받아 화면을 분할하게 됩니다. 즉, 여러 개의 children 집합이 필요한 경우에는 별도의 props를 정의하여 사용합니다.
+```
+    function SplitPane(props) {
+  return (
+    <div className="SplitPane">
+      <div className="SplitPane-left">{props.left}</div>
+      <div className="SplitPane-right">{props.right}</div>
+    </div>
+  );
+}
+
+function App(props) {
+  return <SplitPane left={<Contacts />} right={<Chat />} />;
+}
+```
+* 또 다른 합성 방법으로는 "특수화"라고도 하는 "Specialization"이 있습니다. 예를 들어, WelcomeDialog는 Dialog의 특별한 경우입니다. 특수화는 범용적인 개념을 구체화하여 사용하는 것을 말합니다. 객체지향 언어에서는 상속을 사용하여 특수화를 구현하지만, 리액트에서는 합성을 사용합니다. Dialog 컴포넌트는 범용적으로 사용할 수 있는 컴포넌트를 만들어놓고, 이를 특수한 목적으로 사용하는 방식입니다.
+```
+    function Dialog(props) {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">{props.title}</h1>
+      <h1 className="Dialog-message">{props.message}</h1>
+    </FancyBorder>
+  );
+}
+
+function WelcomeDialog(props) {
+  return (
+    <Dialog
+      title="어서오세요"
+      message="우리 사이트에 방문하신 것을 환영합니다!"
+    />
+  );
+}
+```
+* 또한 Containment와 Specialization을 함께 사용할 수도 있습니다. Containment를 위해서는 props.children을 사용하고, Specialization을 위해 직접 정의한 props를 사용하면 됩니다. 예를 들어, Dialog 컴포넌트는 Containment를 위해 끝 부분에 props.children을 추가하였습니다. SignUpDialog는 Specialization을 위해 title과 message에 값을 넣어주고, 입력을 받기 위해 <input>과 <button>을 사용합니다. 이 두 개의 태그는 모두 props.children으로 전달되어 다이얼로그에 표시됩니다.
+* 상속(inheritance)은 합성과 대비되는 개념으로, 부모 클래스가 가진 변수나 함수 등의 속성을 자식 클래스가 모두 물려받는 개념입니다. 이를 통해 자식 클래스는 부모 클래스의 기능을 활용할 수 있습니다.
+하지만 리액트에서는 상속보다는 합성을 통해 새로운 컴포넌트를 생성하는 것이 일반적입니다. 상속보다는 합성이 더 유연하고 컴포넌트 간의 결합도를 낮출 수 있습니다. 리액트는 컴포넌트를 작은 조각으로 나누어 재사용성을 높이고, 이러한 작은 조각들을 조합하여 원하는 기능을 가진 새로운 컴포넌트를 만들어냅니다. 이를 통해 컴포넌트의 구조를 유연하게 조정할 수 있고, 코드의 재사용성과 가독성을 향상시킬 수 있습니다.
+---
+
+---
+
+# 이수빈 202130422
+
+## 2023-05-11
+###
+#####
+
+
+* 섭씨온도와 화씨온도를 표시하는 방법에 대해 알아보겠습니다.
+
+먼저, Chapter_12 폴더를 생성하고 그 안에 TemperatureInput.jsx와 Calculator.jsx 파일을 만듭니다. TemperatureInput.jsx 파일에는 사용자가 값을 입력하는 입력 폼을 만들 것입니다.
+
+TemperatureInput.jsx 파일의 내용은 다음과 같습니다:
+```
+const scaleName = {
+  c: "섭씨",
+  f: "화씨",
+};
+
+function TemperatureInput(props) {
+  const handleChange = (e) => {
+    props.onTemperatureChange(e.target.value);
+  };
+
+  return (
+    <fieldset>
+      <legend>온도를 입력해주세요 (단위: {scaleName[props.scale]});</legend>
+      <input value={props.temperature} onChange={handleChange} />
+    </fieldset>
+  );
+}
+
+export default TemperatureInput;
+```
+
+* 다음으로, Calculator.jsx 파일에는 사용자가 입력한 숫자를 변환해주는 함수와 출력 폼을 만들 것입니다.
+
+Calculator.jsx 파일의 내용은 다음과 같습니다:
+
+```
+import React, { useState } from "react";
+import TemperatureInput from "./TemperatureInput";
+
+function BoilingVerdict(props) {
+  if (props.celsius >= 100) {
+    return <p>물이 끓습니다.</p>;
+  }
+  return <p>물이 끓지 않습니다.</p>;
+}
+
+function toCelsius(fahrenheit) {
+  return ((fahrenheit - 32) * 5) / 9;
+}
+
+function toFahrenheit(celsius) {
+  return (celsius * 9) / 5 + 32;
+}
+
+function tryConvert(temperature, convert) {
+  const input = parseFloat(temperature);
+  if (Number.isNaN(input)) {
+    return "";
+  }
+  const output = convert(input);
+  const rounded = Math.round(output * 1000) / 1000;
+  return rounded.toString();
+}
+
+function Calculator(props) {
+  const [temperature, setTemperature] = useState("");
+  const [scale, setScale] = useState("c");
+
+  const handleCelsiusChange = (temperature) => {
+    setTemperature(temperature);
+    setScale("c");
+  };
+
+  const handleFahrenheitChange = (temperature) => {
+    setTemperature(temperature);
+    setScale("f");
+  };
+
+  const celsius =
+    scale === "f" ? tryConvert(temperature, toCelsius) : temperature;
+  const fahrenheit =
+    scale === "c" ? tryConvert(temperature, toFahrenheit) : temperature;
+
+  return (
+    <div>
+      <TemperatureInput
+        scale="c"
+        temperature={celsius}
+        onTemperatureChange={handleCelsiusChange}
+      />
+      <TemperatureInput
+        scale="f"
+        temperature={fahrenheit}
+        onTemperatureChange={handleFahrenheitChange}
+      />
+      <BoilingVerdict celsius={parseFloat(celsius)} />
+    </div>
+  );
+}
+
+export default Calculator;
+```
+* 마지막으로, index.js 파일을 변경해야 합니다. 이렇게 수정하면 정상적으로 동작합니다.
+```
+import React from "react";
+import ReactDOM from "react-dom/client";
+import Calculator from "./chapter_12/Calculator";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <Calculator />
+  </React.StrictMode>
+);
+
+reportWebVitals();
+```
+---
+
+---
+
 # 이수빈 202130422
 
 ## 2023-05-04
