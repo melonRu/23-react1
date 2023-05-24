@@ -68,7 +68,7 @@ reportWebVitals();
 ```
 * FancyBorder 컴포넌트를 사용하는 예제입니다.
 
-WelcomDialog 컴포넌트는 FancyBorder 컴포넌트를 사용하며 FancyBorder 컴포넌트는 <h1>과 <p> 두 개의 태그를 children으로 전달받습니다.
+WelcomDialog 컴포넌트는 FancyBorder 컴포넌트를 사용하며 FancyBorder 컴포넌트는 "h1"과 "p" 두 개의 태그를 children으로 전달받습니다.
 
 예시:
 ```
