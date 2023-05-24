@@ -766,7 +766,7 @@ https://www.toptal.com/developers/gitignore
 
 # h1 태그 : 이름
 ## h2 : 강의 첫날 프레젠테이션
-### h3 : 프레젠테이션이라 강의 개요 설명 및 README 필요 없음
+### h3 : 프레젠테이션이라 강의 개요 설명 및 README 연습 시간.
 #####
 ###### h6
 
