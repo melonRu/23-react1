@@ -1,3 +1,82 @@
+---
+
+# 이수빈 202130422
+
+## 2023-04-06
+###
+#####
+
+
+* 컴포넌트 추출은 복잡한 컴포넌트를 작은 단위의 여러 컴포넌트로 나누는 것을 의미합니다. 이렇게 나뉜 컴포넌트들은 다시 결합하여 원래의 복잡한 컴포넌트를 구성합니다. 실무에서는 하나의 컴포넌트에는 하나의 기능만을 포함시켜 설계하는 것이 좋습니다.
+
+* 예를 들어, 아래의 코드에서는 Comment 컴포넌트에서 Avatar 컴포넌트를 추출하여 사용합니다.
+
+
+function Avatar(props) {
+  return (
+    <img className="avatar" src={props.user.avatarUrl} alt={props.user.name} />
+  );
+}
+
+function Comment(props) {
+  return (
+    <div className="comment">
+      <div className="user-info">
+        <Avatar user={props.author} />
+        <div className="user-info-name">{props.author.name}</div>
+      </div>
+      <div className="comment-text">{props.text}</div>
+      <div className="comment-date">{formatDate(props.date)}</div>
+    </div>
+  );
+}
+* 위의 코드를 추출 후 다시 결합하면 아래와 같이 가독성이 높아지는 것을 확인할 수 있습니다.
+
+
+function UserInfo(props) {
+  return (
+    <div className="user-info">
+      <Avatar user={props.user} />
+      <div className="user-info-name">{props.user.name}</div>
+    </div>
+  );
+}
+
+function Comment(props) {
+  return (
+    <div className="comment">
+      <UserInfo user={props.author} />
+      <div className="comment-text">{props.text}</div>
+      <div className="comment-date">{formatDate(props.date)}</div>
+    </div>
+  );
+}
+* 이제 UserInfo 컴포넌트를 Comment 컴포넌트에 반영하면 위의 코드와 같은 결과를 얻을 수 있습니다. 이렇게 컴포넌트를 추출하고 다시 결합함으로써 코드의 가독성을 향상시킬 수 있습니다.
+
+* State는 리액트 컴포넌트의 상태를 나타냅니다. 상태란 컴포넌트의 데이터를 의미하며, 변경 가능한 데이터를 말합니다. State가 변하면 컴포넌트가 다시 렌더링되므로, 렌더링과 관련된 값만을 state에 포함시키는 것이 좋습니다.
+
+* State는 리액트에서 일반적인 자바스크립트 객체로 사용됩니다. 예를 들어, 아래의 코드는 class 컴포넌트인 LikeButton에서 state를 사용하는 예시입니다.
+
+
+class LikeButton extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      liked: false,
+    };
+  }
+}
+
+---
+
+``` html
+메모이올시다
+<html>
+    <div id="sss">
+<html>
+```
+
 
 ---
 
