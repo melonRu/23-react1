@@ -2,8 +2,177 @@
 
 # 이수빈 202130422
 
-## 2023-03-30 한강 벚꽃이 만개함
-### 사이즈 자유 사용
+## 2023-05-04
+###
+#####
+
+* 리스트는 자바스크립트에서 변수나 객체를 배열로 묶어서 저장하는 것과 비슷한 개념입니다. 리스트는 여러 항목을 하나의 변수로 관리할 수 있게 해줍니다.
+
+키(key)는 각 객체나 항목을 구분할 수 있는 고유한 값입니다. 키는 각 항목이나 엘리먼트를 식별하는 역할을 합니다. 리액트에서는 배열과 키를 사용하여 반복적인 엘리먼트를 쉽게 렌더링할 수 있습니다.
+
+예를 들어, 에어비엔비와 같은 화면에서 같은 컴포넌트를 여러 번 반복하여 보여주어야 할 때, 배열에 있는 엘리먼트를 map() 함수를 사용하여 렌더링할 수 있습니다. 아래는 숫자 배열의 각 요소를 추출하여 2를 곱한 후 doubled라는 배열에 저장하는 예시 코드입니다.
+```
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map((number) => number * 2);
+```
+* 리액트에서 map() 함수를 사용한 예시는 다음과 같습니다.
+```
+const numbers = [1, 2, 3, 4, 5];
+const listItems = numbers.map((number) => <li>{number}</li>);
+```
+* 이 코드는 숫자 배열의 각 요소를 map() 함수를 사용하여 추출한 후 태그로 결합하여 반환하고 있습니다. 반환된 listItems는 <ul> 태그와 함께 렌더링됩니다.
+```
+    ReactDOM.render(
+  <ul>
+    <li>{1}</li>
+    <li>{2}</li>
+    <li>{3}</li>
+    <li>{4}</li>
+    <li>{5}</li>
+  </ul>,
+  document.getElementById("root")
+);
+```
+
+* 리스트 컴포넌트를 만들기 위해 위의 코드를 별도의 컴포넌트로 분리할 수 있습니다. 아래는 기본적인 리스트 컴포넌트의 예시입니다.
+```
+    function NumberList(props) {
+  const { numbers } = props;
+  const listItems = numbers.map((number) => <li>{number}</li>);
+  return <ul>{listItems}</ul>;
+}
+
+const numbers = [1, 2, 3, 4, 5];
+ReactDOM.render(<NumberList numbers={numbers} />, document.getElementById("root"));
+```
+*이 컴포넌트는 props로 숫자 배열인 numbers를 받아와 리스트로 렌더링합니다. 위의 코드를 실행하면 "각 아이템은 고유한 키를 가져야 합니다."라는 경고 메시지가 나타납니다. 이 경고 메시지는 각 항목에 key 속성이 없기 때문에 발생합니다.
+
+1. 리스트에서의 키(Key)는 "리스트의 각 아이템을 구별하기 위한 고유한 문자열"입니다. 이 키는 리스트에서 어떤 아이템이 변경되었는지, 추가되었는지 또는 제거되었는지를 구분하기 위해 사용됩니다. 키는 같은 리스트 내에서만 고유한 값이어야 합니다.
+
+출석부 출력하기라는 실습을 통해 키에 대해 알아보겠습니다. 먼저 src/chapter_10 폴더를 생성하고, AttendanceBook.jsx라는 이름의 함수형 컴포넌트를 생성합니다. 그리고 앱을 실행하여 정상적으로 동작하는지 확인합니다.
+
+만약 오류 메시지가 나타난다면, 해당 오류는 앞서 언급한 키(props)에 관한 오류입니다. 각 학생 객체에 고유한 값을 가진 id를 추가하고, map() 함수의 엘리먼트에 key={student.id}를 넣어주면 됩니다. 이렇게 키를 지정함으로써 각 아이템을 고유하게 식별할 수 있습니다.
+---
+
+```
+import SignUp from "./chapter_10/LandingPage"; // 추가
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <LandingPage /> // 변경
+  </React.StrictMode>
+);
+```
+```
+    import React from "react";
+
+const students = [
+  {
+    id: 1, // 고유 key가 될 id값
+    name: "Inje",
+  },
+  {
+    id: 2,
+    name: "Steve",
+  },
+  {
+    id: 3,
+    name: "Bill",
+  },
+  {
+    id: 4,
+    name: "Jeff",
+  },
+];
+
+const AttendanceBook = () => {
+  return (
+    <div>
+      {students.map((student) => {
+        return <li key={student.id}>{student.name}</li>;
+      })}
+    </div>
+  );
+};
+
+export default AttendanceBook;
+```
+
+---
+
+---
+
+# 이수빈 202130422
+
+## 2023-04-27
+###
+#####
+
+* 이벤트 처리하기란
+DOM에서 클릭 이벤트를 처리하는 예제 코드는 다음과 같습니다.
+<button onclick="activate()">Activate</button>
+
+* React에서 클릭 이벤트를 처리하는 예제 코드는 다음과 같습니다.
+<button onClick={activate}>Activate</button>
+
+*두 예제의 차이점은 다음과 같습니다.
+1. 이벤트 이름이 onclick에서 onClick으로 변경되었습니다. (카멜 케이스)
+2. 전달하려는 함수는 문자열이 아닌 그대로 함수로 전달합니다.
+
+이벤트가 발생했을 때 해당 이벤트를 처리하는 함수를 "이벤트 핸들러(Event Handler)"라고 합니다. 또는 이벤트가 발생하는 것을 지속적으로 감지하는 함수를 "이벤트 리스너(Event Listener)"라고도 합니다.
+
+이벤트 핸들러를 추가하는 방법은 다음과 같습니다.
+버튼을 클릭하면 이벤트 핸들러 함수인 handleClick() 함수가 호출되도록 설정되어 있습니다.
+
+bind를 사용하지 않으면 this.handleClick은 전역 스코프에서 호출되어 undefined로 사용할 수 없습니다.
+bind를 사용하지 않으려면 화살표 함수를 사용하는 방법도 있습니다. 하지만 클래스 컴포넌트는 현재 거의 사용되지 않기 때문에 이 내용은 참고용입니다.
+
+클래스형 컴포넌트를 함수형으로 변경하면 다음과 같습니다.
+
+---
+
+```
+import React, { useState } from 'react';
+
+function Toggle() {
+  const [isToggleOn, setIsToggleOn] = useState(true);
+
+  // 방법 1: 함수 안에 함수로 정의
+  function handleClick() {
+    setIsToggleOn(prevState => !prevState);
+  }
+
+  // 방법 2: arrow function으로 정의
+  const handleClick = () => {
+    setIsToggleOn(prevState => !prevState);
+  };
+
+  return (
+    <button onClick={handleClick}>
+      {isToggleOn ? '켜짐' : '꺼짐'}
+    </button>
+  );
+}
+```
+*함수형에서 이벤트 핸들러를 정의하는 방법은 두 가지입니다.
+함수형에서는 this를 사용하지 않고 onClick에 직접 handleclick을 전달하면 됩니다.
+
+Arguments 전달하기
+함수를 정의할 때는 파라미터(Parameter) 혹은 매개변수라고 하며, 함수를 사용할 때는 아규먼트(Argument) 혹은 인자라고 합니다. 이벤트 핸들러에 매개변수를 전달해야 하는 경우가 많습니다.
+```
+<button onClick={(event) => this.deleteItem(id, event)}>삭제하기</button>
+<button onClick={this.deleteItem.bind(this, id)}>삭제하기</button>
+```
+
+---
+
+---
+
+# 이수빈 202130422
+
+## 2023-04-13
+###
 #####
 
 * 컴포넌트 추출
@@ -12,16 +181,33 @@
 *
 * 
 
-1.
-2.
+1. 훅(Hook)은 함수형 컴포넌트에서 상태 관리와 생명주기 기능을 사용할 수 있게 해주는 기능입니다. 이전에는 클래스형 컴포넌트에서 생성자(constructor)에서 state를 정의하고, setState() 함수를 사용하여 state를 업데이트했습니다. 하지만 함수형 컴포넌트에서는 이러한 state 정의와 생명주기 함수의 사용이 제한되어 있었습니다. 훅은 이러한 제한을 극복하기 위해 도입된 기능으로, 함수형 컴포넌트에서도 state와 생명주기 기능을 구현할 수 있도록 해줍니다.
+
+훅은 "use"로 시작하는 이름을 갖고 있으며, state와 생명주기 기능에 갈고리(hook)를 걸어 원하는 시점에 정해진 함수를 실행할 수 있도록 만들어진 함수입니다. 또한, 사용자 정의 훅(custom hook)을 만들어 컴포넌트 로직을 함수로 추출하여 재사용할 수도 있습니다.
+
+2. useState는 함수형 컴포넌트에서 상태(state)를 관리하기 위해 사용하는 훅입니다. 아래 예제는 버튼을 클릭할 때마다 카운트가 증가하는 함수형 컴포넌트를 보여줍니다. useState를 사용하여 state를 정의하고, 버튼 클릭 시 state를 업데이트하는 방식입니다.
+
 
 ---
 
 ``` html
 메모이올시다
-<html>
-    <div id="sss">
-<html>
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    setCount(count + 1);
+  };
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={handleClick}>Increase Count</button>
+    </div>
+  );
+}
 ```
 
 ---
@@ -114,9 +300,6 @@ class LikeButton extends React.Component {
 
 * 컴포넌트 추출
 * 컴포넌트 효율적인 설계에 대해 배웠습니다.
-
-*
-* 
 
 1. Props는 컴포넌트의 속성이나 특성을 나타내는 개념입니다. 컴포넌트에 어떤 props를 전달하느냐에 따라 출력되는 엘리먼트가 달라집니다. props는 다양한 정보를 담고 있는 자바스크립트 객체로서, 컴포넌트에 전달할 데이터를 포함합니다.
 
